@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 using Xunit;
-using static Nuke.Common.Tools.DotNet.WorkloadTasks;
+using static Nuke.Common.Tools.DotNet.Workload.WorkloadTasks;
 namespace DotNetWorkload.Nuke.Tests
 {
 

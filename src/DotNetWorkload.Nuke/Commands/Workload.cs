@@ -1,4 +1,4 @@
-﻿namespace Nuke.Common.Tools.DotNet.Commands
+﻿namespace Nuke.Common.Tools.DotNet.Workload.Commands
 {
     /// <summary>
     ///
