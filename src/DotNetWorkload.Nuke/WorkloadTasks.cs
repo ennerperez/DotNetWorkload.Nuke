@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Nuke.Common.Tools.DotNet
+namespace Nuke.Common.Tools.DotNet.Workload
 {
     /// <summary>
     ///

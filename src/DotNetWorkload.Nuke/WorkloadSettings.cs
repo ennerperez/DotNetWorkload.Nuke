@@ -5,7 +5,7 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Utilities.Collections;
 using System.Collections.Generic;
 
-namespace Nuke.Common.Tools.DotNet
+namespace Nuke.Common.Tools.DotNet.Workload
 {
     /// <summary>
     ///
