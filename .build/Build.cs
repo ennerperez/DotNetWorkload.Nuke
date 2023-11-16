@@ -25,7 +25,7 @@ class Build : NukeBuild
 
     [Solution] public readonly Solution Solution;
 
-    string Author = "Enner Pérez";
+    string _author = "Enner Pérez";
     Version _version = new("1.0.0.0");
     string _hash = string.Empty;
     string _tags = "build automation continuous-integration tools orchestration";
@@ -141,6 +141,15 @@ class Build : NukeBuild
             var projectInfo = Solution.AllProjects.Where(m=> m.Name.EndsWith("Nuke") && !m.Name.Contains("Tests")).FirstOrDefault();
             if (projectInfo != null)
             {
+                var version = "1.0.0";
+                var assemblyInfoVersionFile = Path.Combine(projectInfo.Directory, "Properties", "AssemblyInfo.cs");
+                if (File.Exists(assemblyInfoVersionFile))
+                {
+                    var content = File.ReadAllText(assemblyInfoVersionFile);
+                    var regex = Regex.Match(content, "AssemblyVersion\\(\"(.*)\"\\)", RegexOptions.Compiled);
+                    if (regex.Success && regex.Groups.Count > 1) version = regex.Groups[1].Value;
+                }
+
                 DotNetPack(s => s
                     .EnableNoBuild()
                     .EnableNoRestore()
@@ -148,12 +157,11 @@ class Build : NukeBuild
                     .SetConfiguration(Configuration)
                     .AddProperty("Icon", "icon.png")
                     .SetPackageId($"{projectInfo.Name}")
-                    .SetVersion(_version.ToString(3))
+                    .SetVersion(version)
                     .SetTitle($"{projectInfo.Name}")
-                    .SetAuthors(Author)
+                    .SetAuthors(_author)
                     .SetDescription($"{projectInfo.Name}")
-                    .SetCopyright(Author)
-                    .SetVersionSuffix(_version.ToString(3))
+                    .SetCopyright(_author)
                     .SetPackageProjectUrl(_projectUrl)
                     .SetPackageTags(_tags)
                     .SetOutputDirectory($"{ArtifactsDirectory}"));
