@@ -125,6 +125,7 @@ class Build : NukeBuild
     Target Compile => d => d
         .DependsOn(Clean)
         .DependsOn(Restore)
+        .DependsOn(Prepare)
         .Executes(() =>
         {
             DotNetBuild(s => s
