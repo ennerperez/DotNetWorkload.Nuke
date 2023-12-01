@@ -9,7 +9,6 @@ using Nuke.Common.Utilities.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using Serilog;
-using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 class Build : NukeBuild
@@ -37,80 +36,80 @@ class Build : NukeBuild
     AbsolutePath ArtifactsDirectory => RootDirectory / "output";
 
     Target Prepare => d => d
-    .Before(Compile)
-    .Executes(() =>
-    {
-      #region Version
-
-      var assemblyInfoVersionFile = Path.Combine(SourceDirectory, path2: ".files", path3: "AssemblyInfo.Version.cs");
-      if (File.Exists(assemblyInfoVersionFile))
-      {
-
-        Log.Information(messageTemplate: "Patching: {File}", assemblyInfoVersionFile);
-
-        using (var gitTag = new Process())
+        .Before(Compile)
+        .Executes(() =>
         {
-          gitTag.StartInfo = new ProcessStartInfo(fileName: "git", arguments: "tag --sort=-v:refname")
-          {
-            WorkingDirectory = SourceDirectory, RedirectStandardOutput = true, UseShellExecute = false
-          };
-          gitTag.Start();
-          var value = gitTag.StandardOutput.ReadToEnd().Trim();
-          value = new Regex(pattern: @"((?:[0-9]{1,}\.{0,}){1,})", RegexOptions.Compiled).Match(value).Captures.LastOrDefault()?.Value;
-          if (value != null)
-          {
-            _version = Version.Parse(value);
-          }
+            #region Version
 
-          gitTag.WaitForExit();
-        }
+            var assemblyInfoVersionFile = Path.Combine(SourceDirectory, path2: ".files", path3: "AssemblyInfo.Version.cs");
+            if (File.Exists(assemblyInfoVersionFile))
+            {
 
-        using (var gitLog = new Process())
-        {
-          gitLog.StartInfo = new ProcessStartInfo(fileName: "git", arguments: "rev-parse --verify HEAD")
-          {
-            WorkingDirectory = SourceDirectory, RedirectStandardOutput = true, UseShellExecute = false
-          };
-          gitLog.Start();
-          _hash = gitLog.StandardOutput.ReadLine()?.Trim().Split(separator: " ", StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
-          gitLog.WaitForExit();
-        }
+                Log.Information(messageTemplate: "Patching: {File}", assemblyInfoVersionFile);
 
-        if (_version != null)
-        {
-          var content = File.ReadAllText(assemblyInfoVersionFile);
-          var assemblyVersionRegEx = new Regex(pattern: @"\[assembly: AssemblyVersion\(.*\)\]", RegexOptions.Compiled);
-          var assemblyFileVersionRegEx = new Regex(pattern: @"\[assembly: AssemblyFileVersion\(.*\)\]", RegexOptions.Compiled);
-          var assemblyInformationalVersionRegEx = new Regex(pattern: @"\[assembly: AssemblyInformationalVersion\(.*\)\]", RegexOptions.Compiled);
+                using (var gitTag = new Process())
+                {
+                    gitTag.StartInfo = new ProcessStartInfo(fileName: "git", arguments: "tag --sort=-v:refname")
+                    {
+                        WorkingDirectory = SourceDirectory, RedirectStandardOutput = true, UseShellExecute = false
+                    };
+                    gitTag.Start();
+                    var value = gitTag.StandardOutput.ReadToEnd().Trim();
+                    value = new Regex(pattern: @"((?:[0-9]{1,}\.{0,}){1,})", RegexOptions.Compiled).Match(value).Captures.LastOrDefault()?.Value;
+                    if (value != null)
+                    {
+                        _version = Version.Parse(value);
+                    }
 
-          content = assemblyVersionRegEx.Replace(content, $"[assembly: AssemblyVersion(\"{_version}\")]");
-          content = assemblyFileVersionRegEx.Replace(content, $"[assembly: AssemblyFileVersion(\"{_version}\")]");
-          content = assemblyInformationalVersionRegEx.Replace(content, $"[assembly: AssemblyInformationalVersion(\"{_version:3}+{_hash}\")]");
+                    gitTag.WaitForExit();
+                }
 
-          File.WriteAllText(assemblyInfoVersionFile, content);
+                using (var gitLog = new Process())
+                {
+                    gitLog.StartInfo = new ProcessStartInfo(fileName: "git", arguments: "rev-parse --verify HEAD")
+                    {
+                        WorkingDirectory = SourceDirectory, RedirectStandardOutput = true, UseShellExecute = false
+                    };
+                    gitLog.Start();
+                    _hash = gitLog.StandardOutput.ReadLine()?.Trim().Split(separator: " ", StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+                    gitLog.WaitForExit();
+                }
 
-          Log.Information(messageTemplate: "Version: {Version}", _version);
-          Log.Information(messageTemplate: "Hash: {Hash}", _hash);
+                if (_version != null)
+                {
+                    var content = File.ReadAllText(assemblyInfoVersionFile);
+                    var assemblyVersionRegEx = new Regex(pattern: @"\[assembly: AssemblyVersion\(.*\)\]", RegexOptions.Compiled);
+                    var assemblyFileVersionRegEx = new Regex(pattern: @"\[assembly: AssemblyFileVersion\(.*\)\]", RegexOptions.Compiled);
+                    var assemblyInformationalVersionRegEx = new Regex(pattern: @"\[assembly: AssemblyInformationalVersion\(.*\)\]", RegexOptions.Compiled);
 
-        }
-        else
-        {
-          Log.Warning("Version was not found");
-        }
-      }
+                    content = assemblyVersionRegEx.Replace(content, $"[assembly: AssemblyVersion(\"{_version}\")]");
+                    content = assemblyFileVersionRegEx.Replace(content, $"[assembly: AssemblyFileVersion(\"{_version}\")]");
+                    content = assemblyInformationalVersionRegEx.Replace(content, $"[assembly: AssemblyInformationalVersion(\"{_version:3}+{_hash}\")]");
 
-      #endregion
+                    File.WriteAllText(assemblyInfoVersionFile, content);
 
-    });
+                    Log.Information(messageTemplate: "Version: {Version}", _version);
+                    Log.Information(messageTemplate: "Hash: {Hash}", _hash);
+
+                }
+                else
+                {
+                    Log.Warning("Version was not found");
+                }
+            }
+
+            #endregion
+
+        });
 
     Target Clean => d => d
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            EnsureCleanDirectory(PublishDirectory);
-            EnsureCleanDirectory(ArtifactsDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach((path) => path.DeleteDirectory());
+            TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach((path) => path.DeleteDirectory());
+            AbsolutePath.Create(PublishDirectory).CreateOrCleanDirectory();
+            AbsolutePath.Create(ArtifactsDirectory).CreateOrCleanDirectory();
         });
 
     Target Restore => d => d
@@ -138,7 +137,7 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var projectInfo = Solution.AllProjects.Where(m=> m.Name.EndsWith("Nuke") && !m.Name.Contains("Tests")).FirstOrDefault();
+            var projectInfo = Solution.GetAllProjects("*.Nuke").Where(m => !m.Name.Contains("Tests")).FirstOrDefault();
             if (projectInfo != null)
             {
                 var version = "1.0.0";
