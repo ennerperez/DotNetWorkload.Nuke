@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet.Workload;
 using Nuke.Common.Tools.DotNet.Workload.Records;
 using System.Linq;
 using System.Text;

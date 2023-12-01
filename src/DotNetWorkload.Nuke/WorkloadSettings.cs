@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Nuke.Common.Tooling;
-using Nuke.Common.Utilities.Collections;
-using System.Collections.Generic;
 
 namespace Nuke.Common.Tools.DotNet.Workload
 {
@@ -40,7 +39,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <summary>
         ///
         /// </summary>
-        public new Action<OutputType, string> ProcessCustomLogger => DotNetTasks.DotNetLogger;
+        public Action<OutputType, string> ProcessCustomLogger => DotNetTasks.DotNetLogger;
 
 
         /// <summary>
