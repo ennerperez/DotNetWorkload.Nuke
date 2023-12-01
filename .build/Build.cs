@@ -9,7 +9,6 @@ using Nuke.Common.Utilities.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using Serilog;
-using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 class Build : NukeBuild
