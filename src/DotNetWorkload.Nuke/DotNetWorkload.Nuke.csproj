@@ -5,14 +5,14 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <RootNamespace>Nuke.Common.Tools.DotNet.Workload</RootNamespace>
-        <NoWarn>CS0649;CS0169</NoWarn>
+        <NoWarn>CS0649;CS0169;CA1050;CA1822;CA2211;IDE1006</NoWarn>
         <LangVersion>latest</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <Deterministic>false</Deterministic>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Nuke.Common" Version="7.0.6" />
+        <PackageReference Include="Nuke.Common" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
