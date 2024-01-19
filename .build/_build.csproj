@@ -19,8 +19,4 @@
         <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\src\DotNetWorkload.Nuke\DotNetWorkload.Nuke.csproj"/>
-    </ItemGroup>
-
 </Project>
