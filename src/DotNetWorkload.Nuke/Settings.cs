@@ -10,15 +10,14 @@ namespace Nuke.Common.Tools.DotNet.Workload
     ///
     /// </summary>
     [PublicAPI]
-    [ExcludeFromCodeCoverage]
     [Serializable]
-    public class WorkloadSettings : ToolSettings
+    public class Settings : ToolSettings
     {
 
         /// <summary>
         ///
         /// </summary>
-        public WorkloadSettings()
+        public Settings()
         {
         }
 
@@ -26,7 +25,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         ///
         /// </summary>
         /// <param name="command"></param>
-        public WorkloadSettings(Commands.Workload command) : this()
+        public Settings(Commands.Workload command) : this()
         {
             Command = command;
         }
@@ -34,18 +33,23 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <summary>
         ///
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public override string ProcessToolPath => base.ProcessToolPath ?? DotNetTasks.DotNetPath;
 
         /// <summary>
         ///
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public Action<OutputType, string> ProcessCustomLogger => DotNetTasks.DotNetLogger;
 
 
         /// <summary>
         ///
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual IReadOnlyDictionary<string, object> Properties => PropertiesInternal.AsReadOnly();
+
+        [ExcludeFromCodeCoverage]
         internal Dictionary<string, object> PropertiesInternal { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>

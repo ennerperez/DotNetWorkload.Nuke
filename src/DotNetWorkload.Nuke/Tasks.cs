@@ -14,12 +14,12 @@ namespace Nuke.Common.Tools.DotNet.Workload
     ///
     /// </summary>
     [PublicAPI]
-    [ExcludeFromCodeCoverage]
-    public static class WorkloadTasks
+    public static class Tasks
     {
         /// <summary>
         ///
         /// </summary>
+        [ExcludeFromCodeCoverage]
         private static string DotNetPath => ToolPathResolver.TryGetEnvironmentExecutable("DOTNET_EXE") ?? ToolPathResolver.GetPathExecutable("dotnet");
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// </summary>
         /// <param name="toolSettings"></param>
         /// <returns></returns>
-        private static IReadOnlyCollection<Output> DotNetWorkload(WorkloadSettings toolSettings = null)
+        private static IReadOnlyCollection<Output> DotNetWorkload(Settings toolSettings = null)
         {
-            toolSettings = toolSettings ?? new WorkloadSettings();
+            toolSettings = toolSettings ?? new Settings();
             var sb = new StringBuilder();
             sb.Append("workload ");
             switch (toolSettings.Command)
@@ -70,9 +70,9 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// </summary>
         /// <param name="configurator"></param>
         /// <returns></returns>
-        private static IReadOnlyCollection<Output> DotNetWorkload(Configure<WorkloadSettings> configurator)
+        private static IReadOnlyCollection<Output> DotNetWorkload(Configure<Settings> configurator)
         {
-            return DotNetWorkload(configurator(new WorkloadSettings()));
+            return DotNetWorkload(configurator(new Settings()));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadInstall(params string[] workloadIds)
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Install)
+            return DotNetWorkload(new Settings(Commands.Workload.Install)
                 .SetWorkloadId(workloadIds));
         }
 
@@ -92,7 +92,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadUpdate()
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Update));
+            return DotNetWorkload(new Settings(Commands.Workload.Update));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadList()
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.List));
+            return DotNetWorkload(new Settings(Commands.Workload.List));
         }
 
 #if NET7_0
@@ -131,7 +131,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadSearch(string searchString)
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Search)
+            return DotNetWorkload(new Settings(Commands.Workload.Search)
                 .SetSearchString(searchString));
         }
 
@@ -156,7 +156,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadUninstall(params string[] workloadIds)
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Uninstall)
+            return DotNetWorkload(new Settings(Commands.Workload.Uninstall)
                 .SetWorkloadId(workloadIds));
         }
 
@@ -166,7 +166,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadRepair()
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Uninstall));
+            return DotNetWorkload(new Settings(Commands.Workload.Uninstall));
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadRestore(Project project)
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Restore)
+            return DotNetWorkload(new Settings(Commands.Workload.Restore)
                 .SetProject(project));
         }
 
@@ -185,7 +185,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadRestore(Solution solution)
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Restore)
+            return DotNetWorkload(new Settings(Commands.Workload.Restore)
                 .SetSolution(solution));
         }
 
@@ -195,7 +195,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadRestore(string path)
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Restore)
+            return DotNetWorkload(new Settings(Commands.Workload.Restore)
                 .SetPath(path));
         }
 
@@ -205,7 +205,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <returns></returns>
         public static IReadOnlyCollection<Output> DotNetWorkloadClean()
         {
-            return DotNetWorkload(new WorkloadSettings(Commands.Workload.Clean));
+            return DotNetWorkload(new Settings(Commands.Workload.Clean));
         }
 
     }

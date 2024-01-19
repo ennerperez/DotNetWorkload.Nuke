@@ -11,7 +11,6 @@ namespace Nuke.Common.Tools.DotNet.Workload
     ///
     /// </summary>
     [PublicAPI]
-    [ExcludeFromCodeCoverage]
     public static class Extensions
     {
 
@@ -23,7 +22,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         [Pure]
-        internal static T SetCommand<T>(this T toolSettings, Commands.Workload command) where T : WorkloadSettings
+        internal static T SetCommand<T>(this T toolSettings, Commands.Workload command) where T : Settings
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.Command = command;
@@ -31,7 +30,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         }
 
         [Pure]
-        public static T SetWorkloadId<T>(this T toolSettings, params string[] workloadIds) where T : WorkloadSettings
+        public static T SetWorkloadId<T>(this T toolSettings, params string[] workloadIds) where T : Settings
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.WorkloadIds = workloadIds;
@@ -40,7 +39,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
 
 
         [Pure]
-        public static T SetSearchString<T>(this T toolSettings, string searchString) where T : WorkloadSettings
+        public static T SetSearchString<T>(this T toolSettings, string searchString) where T : Settings
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.SearchString = searchString;
@@ -48,7 +47,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         }
 
         [Pure]
-        public static T SetProject<T>(this T toolSettings, Project project) where T : WorkloadSettings
+        public static T SetProject<T>(this T toolSettings, Project project) where T : Settings
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.Project = project.Path;
@@ -56,7 +55,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         }
 
         [Pure]
-        public static T SetSolution<T>(this T toolSettings, Solution solution) where T : WorkloadSettings
+        public static T SetSolution<T>(this T toolSettings, Solution solution) where T : Settings
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.Solution = solution.Path;
@@ -64,7 +63,7 @@ namespace Nuke.Common.Tools.DotNet.Workload
         }
 
         [Pure]
-        public static T SetPath<T>(this T toolSettings, string path) where T : WorkloadSettings
+        public static T SetPath<T>(this T toolSettings, string path) where T : Settings
         {
             toolSettings = toolSettings.NewInstance();
             if (path.EndsWith(".sln")) toolSettings.Solution = path;
